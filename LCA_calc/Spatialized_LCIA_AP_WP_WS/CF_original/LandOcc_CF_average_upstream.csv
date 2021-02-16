@@ -1,0 +1,41 @@
+﻿Biosphere_index,Type,Subtype,Sub_subtype,CF,unit
+343, annual crop,,,1,m2a
+344, annual crop, greenhouse,,1,m2a
+345, annual crop, irrigated,,1,m2a
+346, annual crop, irrigated, intensive,1,m2a
+347, annual crop, non-irrigated,,1,m2a
+348, annual crop, non-irrigated, extensive,1,m2a
+349, annual crop, non-irrigated, intensive,1,m2a
+350, arable land, unspecified use,,1,m2a
+351, construction site,,,0.592819,m2a
+352, dump site,,,0.592819,m2a
+353, forest, extensive,,0.228267538,m2a
+354, forest, intensive,,0.228267538,m2a
+355, grassland, natural (non-use),,0,m2a
+356, grassland, natural, for livestock grazing,0.7901429,m2a
+357, industrial area,,,0.592819,m2a
+358, inland waterbody, unspecified,,0.592819,m2a
+359, lake, artificial,,0.376183151,m2a
+360, mineral extraction site,,,0.28629411,m2a
+361, pasture, man made,,0.28629411,m2a
+362, pasture, man made, extensive,0.28629411,m2a
+363, pasture, man made, intensive,0.28629411,m2a
+364, permanent crop,,,0.106509995,m2a
+365, permanent crop, irrigated,,0.106509995,m2a
+366, permanent crop, irrigated, intensive,0.106509995,m2a
+367, permanent crop, non-irrigated,,0.106509995,m2a
+368, permanent crop, non-irrigated, intensive,0.106509995,m2a
+369, river, artificial,,0.376183151,m2a
+370, seabed, drilling and mining,,0.592819,m2a
+371, seabed, infrastructure,,0.592819,m2a
+372, seabed, unspecified,,0.592819,m2a
+373, shrub land, sclerophyllous,,0.178173098,m2a
+374, traffic area, rail network,,0.592819,m2a
+375, traffic area, rail/road embankment,,0.592819,m2a
+376, traffic area, road network,,0.592819,m2a
+377, unspecified,,,0.592819,m2a
+378, unspecified, natural (non-use),,0.592819,m2a
+379, urban, continuously built,,0.592819,m2a
+380, urban, discontinuously built,,0.592819,m2a
+381, urban, green area,,0.592819,m2a
+382, urban, industrial fallow (non-use),,0.592819,m2a

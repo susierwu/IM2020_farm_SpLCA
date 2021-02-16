@@ -1,0 +1,164 @@
+---
+title: "SpLCA_Inner Mongolia_Hulunbuir farms"
+author: "Susie WU"
+date: "02/04/2021"
+runtime: shiny
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: True
+      smooth_scroll: True
+---
+
+```{r setup, include=FALSE}
+library(leaflet)
+library(spData)
+library(maps)
+library(sf)
+library(RColorBrewer)
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r include = FALSE}
+#read in data
+acid = read.csv("LCA_results_Acid_v4.csv", header = T)
+lcia = read.csv("LCA_results_ALL_v4.csv", header = T)
+```
+
+
+```{r include = FALSE}
+#define functions
+farmbreak <- function(farm_sub_result) {
+  farm4level <- cut(farm_sub_result, breaks = c(0,summary(farm_sub_result)[2],summary(farm_sub_result)[3],summary(farm_sub_result)[5],summary(farm_sub_result)[6]+1), right=F,
+      labels = c("1st_quant","median","3rd_quant","max"))
+  return(farm4level)
+}
+
+farmmap <- function(Long, Lat, farm_sub_result, farm_no, cir_title) {
+  beatCol <- colorFactor(palette = c("green4","mediumturquoise", "orange", "violetred1"), farmbreak(farm_sub_result))
+  a  <- leaflet() %>% addTiles() %>%
+    # study region
+    fitBounds(118, 48, 120,50) %>%
+    #addMeasure() %>%
+    addCircleMarkers(
+      lng= Long,
+      lat= Lat,
+      radius=8,
+      color = beatCol(farmbreak(farm_sub_result)),
+      stroke=FALSE, # Circle stroke
+      fillOpacity=0.6, # Circle Fill Opacity
+      popup=paste(
+        cir_title, ",", farm_no, ":", farm_sub_result, sep="")
+    )%>%
+    addLegend('bottomright', pal = beatCol, values = farmbreak(farm_sub_result),
+              title = cir_title,
+              opacity = 1)
+    return(a)
+}
+```
+
+
+# Spatial LCA results
+Below are the interactive maps for spatial LCA results for the IM project (supported by the Young Scientists Fund of the National Natural Science Foundation of China (No. 41901264)). \
+Each farm has multiple output and we defined the FU as one unit of gross income (in Chinese yuan RMB) earned by each farm in the year of 2018, regardless of what agricultural products are produced and sold. \
+The LCA is separated into two modules: 1) direct emissions and resource consumptions from on-site processes, and 2) associated emissions and resource consumptions from upstream processes for everything else. \
+The LCIA includes following five impact categories for a total of 45 farms. Specifically, for the three impact categories that are spatially-dependent (i.e. water scarcity, freshwater eutrophication, and terrestrial acidification), spatialized characterization factors from IMPACT World+ is adopted. For climate change and fossil fuel consumption, default CF is used, adopting IPCC 2013 – global warming potential (GWP) 100a, and 'cumulative energy demand – non-renewable energy resources, fossil', respectively. \
+ 1. Climate change – Global Warming Potential (GWP, kg CO2 eq.) \
+ 2. Terrestrial acidification – Acidification Potential (AP, kg SO2 eq.) \
+ 3. Freshwater eutrophication – Eutrophication Potential (EP, kg PO4 P-lim eq) \
+ 4. Water scarcity (WS, m3 world-eq./m3 consumed) \
+ 5. Cumulative energy demand (CED, MJ eq.)
+ 
+## 1. GWP (kg CO2 eq.)
+### GWP_total (upstream+onsite)
+GWP_total spatial layout 
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$GWPperRMB_total, lcia$New_name, "GWP(kgCO2eq)_total")
+```
+
+### GWP_upstream processes
+GWP_upstream processes spatial layout
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$GWPperRMB_upstream, lcia$New_name, "GWP(kgCO2eq)_upstream")
+```
+
+### GWP_onsite processes
+GWP_onsite processes spatial layout
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$GWPperRMB_onsite, lcia$New_name, "GWP(kgCO2eq)_onsite")
+```
+
+
+## 2. AP (kg SO2 eq.)
+### AP_total (upstream+onsite)
+AP_total spatial layout 
+```{r  echo=FALSE}
+farmmap(acid$Long,acid$Lat, acid$all_total_RMB,acid$New_name,"AP(kgSO2eq)_total")
+```
+
+### AP_upstream processes
+AP_upstream processes spatial layout
+```{r  echo=FALSE}
+farmmap(acid$Long,acid$Lat, acid$upstreamAcid_RMB,acid$New_name,"AP(kgSO2eq)_upstream")
+```
+
+### AP_onsite processes
+AP_onsite processes spatial layout
+```{r  echo=FALSE}
+farmmap(acid$Long,acid$Lat, acid$onsite_total_RMB,acid$New_name,"AP(kgSO2eq)_onsite")
+```
+
+
+
+## 3. EP (kg PO4 P-lim eq.)
+### EP_total (upstream+onsite)
+EP_total spatial layout 
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$EUperRMB_total, lcia$New_name, "EP(kgPO4eq)_total")
+```
+
+### EP_upstream processes
+EP_upstream processes spatial layout
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$EUperRMB_upstream, lcia$New_name, "EP(kgPO4eq)_upstream")
+```
+
+### EP_onsite processes
+EP_onsite processes spatial layout (onsite NA due to lack of spatialized characterization factors (SCF) for the study sites)
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$EUperRMB_onsite, lcia$New_name, "EP(kgPO4eq)_onsite")
+```
+
+
+
+
+## 4. WS (m3 world-eq./m3 consumed)
+### WS_total (upstream+onsite)
+WS_total spatial layout 
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$WTperRMB_total, lcia$New_name, "WS(m3wld-eq/m3cons)_total")
+```
+
+### WS_upstream processes
+WS_upstream processes spatial layout
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$WTperRMB_upstream, lcia$New_name, "WS(m3wld-eq/m3cons)_upstream")
+```
+
+### WS_onsite processes
+WS_onsite processes spatial layout
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$WTperRMB_onsite, lcia$New_name, "WS(m3wld-eq/m3cons)_onsite")
+```
+
+
+
+## 5. CED (MJ eq.)
+### CED_total (upstream+onsite)
+CED_total spatial layout (recorded as the total consumption to match the SCF, not separating upstream/onsite as energy carriers are produced upstream)
+```{r  echo=FALSE}
+farmmap(lcia$Long, lcia$Lat,lcia$MJperRMB, lcia$New_name, "CED(MJeq)_total")
+```
